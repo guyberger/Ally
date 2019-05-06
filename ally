@@ -12,7 +12,7 @@ else
 	if [ $1 = "-r" ]; then
 		KEYC=$(cat ~/.bashrc | grep alias | cut -d" " -f2 | cut -d"=" -f1 | grep "\b$2\b" -c)
 		if [[ $KEYC > 0 ]]; then
-			echo 'Removing key '$2'? (y/n)'
+			printf "%s" 'Removing key '$2'? (y/n) '
 			read ans
 			if [ "$ans" = y ] || [ "$ans" = "Y" ]; then
 				sed -i '/alias '"$2"'/d' ~/.bashrc
@@ -26,7 +26,7 @@ else
 		if [[ $KEYC > 0 ]]; then
 			echo "Key already in use."
 		else
-			echo 'Adding alias '$1'='"'"$2"'? (y/n)"
+			printf "%s" 'Adding alias '$1'='"'"$2"'? (y/n) "
 			read ans
 			if [ "$ans" = "y" ] || [ "ans" = "Y" ]; then
 				echo 'alias '$1'='"'"$2"'" >> ~/.bashrc 
