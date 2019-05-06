@@ -1,18 +1,37 @@
 #!/bin/bash
+
+# Define variables
 VAR="'"'"'
 KEY=""
+
 if [ $# != 2 ]; then
-	echo "Usage: ally <alias> '<command>' "
+	echo "Usage:"
+       	echo "Add key: ally <alias-key> '<command>' "
+	echo "Remove key: ally -r <alias-key> "
 else
-	KEYC=$(cat ~/.bashrc | grep alias | cut -d" " -f2 | cut -d"=" -f1 | grep "\b$1\b" -c)
-	if [[ $KEYC > 0 ]]; then
-		echo "Key already in use."
+	if [ $1 = "-r" ]; then
+		KEYC=$(cat ~/.bashrc | grep alias | cut -d" " -f2 | cut -d"=" -f1 | grep "\b$2\b" -c)
+		if [[ $KEYC > 0 ]]; then
+			echo 'Removing key '$2'? (y/n)'
+			read ans
+			if [ "$ans" = y ] || [ "$ans" = "Y" ]; then
+				sed -i '/alias '"$2"'/d' ~/.bashrc
+				echo 'Key '"$2"' removed'
+			fi
+		else
+			echo 'No matching key for: '"'"$2"'"
+		fi
 	else
-		echo 'adding alias '$1'='"'"$2"'? (y/n)"
-		read ans
-		if [ "$ans" = "y" ] || [ "ans" = "Y" ]; then
-			echo 'alias '$1'='"'"$2"'" >> ~/.bashrc 
-			exec bash
+		KEYC=$(cat ~/.bashrc | grep alias | cut -d" " -f2 | cut -d"=" -f1 | grep "\b$1\b" -c)
+		if [[ $KEYC > 0 ]]; then
+			echo "Key already in use."
+		else
+			echo 'Adding alias '$1'='"'"$2"'? (y/n)"
+			read ans
+			if [ "$ans" = "y" ] || [ "ans" = "Y" ]; then
+				echo 'alias '$1'='"'"$2"'" >> ~/.bashrc 
+				exec bash
+			fi
 		fi
 	fi
 fi 	
