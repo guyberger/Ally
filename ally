@@ -1,0 +1,19 @@
+#!/bin/bash
+VAR="'"'"'
+KEY=""
+if [ $# != 2 ]; then
+	echo "Usage: ally <alias> '<command>' "
+else
+	KEYC=$(cat ~/.bashrc | grep alias | cut -d" " -f2 | cut -d"=" -f1 | grep "\b$1\b" -c)
+	if [[ $KEYC > 0 ]]; then
+		echo "Key already in use."
+	else
+		echo 'adding alias '$1'='"'"$2"'? (y/n)"
+		read ans
+		if [ "$ans" = "y" ] || [ "ans" = "Y" ]; then
+			echo 'alias '$1'='"'"$2"'" >> ~/.bashrc 
+			exec bash
+		fi
+	fi
+fi 	
+	
